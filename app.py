@@ -36,9 +36,9 @@ def main():
                 filtered_class_map += results.class_map * (label_map == label).astype(int)
 
             mask = semantic_segmentation.build_image_mask(filtered_class_map)
-            blended = edgeiq.blend_images(frame, mask, alpha=0.5)
+            combined = np.concatenate((frame, mask), axis=0)
 
-            streamer.send_data(blended, text)
+            streamer.send_data(combined, text)
             if streamer.check_exit():
                 break
 
