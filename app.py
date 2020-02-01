@@ -1,4 +1,5 @@
 import edgeiq
+import numpy as np
 
 
 def main():
@@ -10,6 +11,9 @@ def main():
     print("Accelerator: {}\n".format(semantic_segmentation.accelerator))
     print("Model:\n{}\n".format(semantic_segmentation.model_id))
     print("Labels:\n{}\n".format(semantic_segmentation.labels))
+
+    labels_to_mask = ['Person', 'Rider', 'Bicycle']
+    print("Labels to mask:\n{}\n".format(labels_to_mask))
 
     with edgeiq.FileVideoStream('Use Case - Clip 3.mp4') as video_stream, \
             edgeiq.Streamer() as streamer:
@@ -25,7 +29,13 @@ def main():
             text.append("Legend:")
             text.append(semantic_segmentation.build_legend())
 
-            mask = semantic_segmentation.build_image_mask(results.class_map)
+            label_map = np.array(semantic_segmentation.labels)[results.class_map]
+            # Setting to zero defaults to "Unlabeled"
+            filtered_class_map = np.zeros(results.class_map.shape).astype(int)
+            for label in labels_to_mask:
+                filtered_class_map += results.class_map * (label_map == label).astype(int)
+
+            mask = semantic_segmentation.build_image_mask(filtered_class_map)
             blended = edgeiq.blend_images(frame, mask, alpha=0.5)
 
             streamer.send_data(blended, text)
