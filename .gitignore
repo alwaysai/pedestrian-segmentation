@@ -1,4 +1,5 @@
 venv
 *.mp4
+*.avi
 models
 alwaysai.target.json
