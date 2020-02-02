@@ -15,11 +15,16 @@ def main():
     labels_to_mask = ['Person', 'Rider', 'Bicycle', 'Motorcycle']
     print("Labels to mask:\n{}\n".format(labels_to_mask))
 
+    enable_streamer = False
+
     with edgeiq.FileVideoStream('Use Case - Clip 3.mp4') as video_stream, \
-            edgeiq.Streamer() as streamer:
+            edgeiq.VideoWriter(output_path="processed_video.avi") as video_writer:
+
+        if enable_streamer:
+            streamer = edgeiq.Streamer().setup()
 
         last_non_detection = None
-        while True:
+        while video_stream.more():
             frame = video_stream.read()
 
             if last_non_detection is None:
@@ -27,11 +32,12 @@ def main():
 
             results = semantic_segmentation.segment_image(frame)
 
-            # Generate text to display on streamer
-            text = ["Model: {}".format(semantic_segmentation.model_id)]
-            text.append("Inference time: {:1.3f} s".format(results.duration))
-            text.append("Legend:")
-            text.append(semantic_segmentation.build_legend())
+            if enable_streamer:
+                # Generate text to display on streamer
+                text = ["Model: {}".format(semantic_segmentation.model_id)]
+                text.append("Inference time: {:1.3f} s".format(results.duration))
+                text.append("Legend:")
+                text.append(semantic_segmentation.build_legend())
 
             label_map = np.array(semantic_segmentation.labels)[results.class_map]
             # Setting to zero defaults to "Unlabeled"
@@ -44,11 +50,18 @@ def main():
             last_non_detection[non_detection_map] = frame[non_detection_map].copy()
             out_frame = frame.copy()
             out_frame[detection_map] = last_non_detection[detection_map].copy()
-            combined = np.concatenate((frame, out_frame), axis=0)
 
-            streamer.send_data(combined, text)
-            if streamer.check_exit():
-                break
+            if enable_streamer:
+                combined = np.concatenate((frame, out_frame), axis=0)
+
+                streamer.send_data(combined, text)
+                if streamer.check_exit():
+                    break
+
+            video_writer.write_frame(out_frame)
+
+        if enable_streamer:
+            streamer.close()
 
         print("Program Ending")
 
