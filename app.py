@@ -18,8 +18,12 @@ def main():
     with edgeiq.FileVideoStream('Use Case - Clip 3.mp4') as video_stream, \
             edgeiq.Streamer() as streamer:
 
+        last_non_detection = None
         while True:
             frame = video_stream.read()
+
+            if last_non_detection is None:
+                last_non_detection = np.zeros(frame.shape)
 
             results = semantic_segmentation.segment_image(frame)
 
@@ -35,10 +39,12 @@ def main():
             for label in labels_to_mask:
                 filtered_class_map += results.class_map * (label_map == label).astype(int)
 
-            bool_class_map = (filtered_class_map > 0)
-            masked_frame = np.zeros(frame.shape)
-            masked_frame[bool_class_map] = frame[bool_class_map].copy()
-            combined = np.concatenate((frame, masked_frame), axis=0)
+            non_detection_map = (filtered_class_map == 0)
+            detection_map = (filtered_class_map != 0)
+            last_non_detection[non_detection_map] = frame[non_detection_map].copy()
+            out_frame = frame.copy()
+            out_frame[detection_map] = last_non_detection[detection_map].copy()
+            combined = np.concatenate((frame, out_frame), axis=0)
 
             streamer.send_data(combined, text)
             if streamer.check_exit():
