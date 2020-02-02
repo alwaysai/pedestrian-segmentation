@@ -12,7 +12,7 @@ def main():
     print("Model:\n{}\n".format(semantic_segmentation.model_id))
     print("Labels:\n{}\n".format(semantic_segmentation.labels))
 
-    labels_to_mask = ['Person', 'Rider', 'Bicycle']
+    labels_to_mask = ['Person', 'Rider', 'Bicycle', 'Motorcycle']
     print("Labels to mask:\n{}\n".format(labels_to_mask))
 
     with edgeiq.FileVideoStream('Use Case - Clip 3.mp4') as video_stream, \
