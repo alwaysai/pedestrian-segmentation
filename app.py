@@ -35,8 +35,10 @@ def main():
             for label in labels_to_mask:
                 filtered_class_map += results.class_map * (label_map == label).astype(int)
 
-            mask = semantic_segmentation.build_image_mask(filtered_class_map)
-            combined = np.concatenate((frame, mask), axis=0)
+            bool_class_map = (filtered_class_map > 0)
+            masked_frame = np.zeros(frame.shape)
+            masked_frame[bool_class_map] = frame[bool_class_map].copy()
+            combined = np.concatenate((frame, masked_frame), axis=0)
 
             streamer.send_data(combined, text)
             if streamer.check_exit():
