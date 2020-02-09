@@ -1,5 +1,5 @@
 # Pedestrian Segmentation
-This app expands on the *semantic_segmentation_cityscape* starter app to build an app that segments pedestrians and bicyclists in each frame of a video, and performing actions based on the results. The full tutorial can be found on the [alwaysAI blog](https://learn.alwaysai.co/how-to-detect-pedestrians-and-bicyclists-in-a-cityscape-video).
+This app expands on the *semantic_segmentation_cityscape* starter app to build an app that segments pedestrians and bicyclists in each frame of a video, and performs actions based on the results. The full tutorial can be found on the [alwaysAI blog](https://learn.alwaysai.co/how-to-detect-pedestrians-and-bicyclists-in-a-cityscape-video).
 
 ## Setup
 This app requires access to alwaysAI's Beta program. To sign up go to the [Sign up page](https://www.alwaysai.co/dashboard)
