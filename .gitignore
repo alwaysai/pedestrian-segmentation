@@ -3,3 +3,4 @@ venv
 *.avi
 models
 alwaysai.target.json
+alwaysai.project.json

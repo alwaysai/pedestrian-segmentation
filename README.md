@@ -2,9 +2,11 @@
 This app expands on the *semantic_segmentation_cityscape* starter app to build an app that segments pedestrians and bicyclists in each frame of a video, and performs actions based on the results. The full tutorial can be found on the [alwaysAI blog](https://learn.alwaysai.co/how-to-detect-pedestrians-and-bicyclists-in-a-cityscape-video).
 
 ## Setup
-This app requires access to alwaysAI's Beta program. To sign up go to the [Sign up page](https://www.alwaysai.co/dashboard)
+This app requires an alwaysAI account. Head to the [Sign up page](https://www.alwaysai.co/dashboard) if you don't have an account yet. Follow the instructions to install the alwaysAI toolchain on your development machine.
 
-Once accepted to the program, follow the setup instructions located on the [Docs page](https://www.alwaysai.co/docs/getting_started/introduction.html) - Note this link is accessible only to beta users.
+Next, create an empty project to be used with this app. When you clone this repo, you can run `aai app configure` within the repo directory and your new project will appear in the list.
+
+You'll need to supply your own input video and update the file path in `FileVideoStream`.
 
 ## Usage
 Once the alwaysAI toolset is installed on your development machine (or edge device if developing directly on it) you can run the following CLI commands:
@@ -21,4 +23,3 @@ To start the app
 
 `aai app start`
 
-You'll need to supply your own input video and update the file path in `FileVideoStream`.
