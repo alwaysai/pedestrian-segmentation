@@ -15,9 +15,9 @@ To set up the target device & folder path
 
 `aai app configure`
 
-To build and deploy the docker image of the app to the target device
+To install the app on the target device
 
-`aai app deploy`
+`aai app install`
 
 To start the app
 
