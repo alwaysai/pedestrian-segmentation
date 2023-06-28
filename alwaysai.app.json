@@ -1,6 +1,6 @@
 {
   "models": {
-    "alwaysai/enet": 1
+    "alwaysai/enet": 2
   },
   "scripts": {
     "start": "python app.py"
